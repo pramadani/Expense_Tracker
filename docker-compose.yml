@@ -2,7 +2,7 @@ services:
   database:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: expense_tracker
     volumes:
       - expense-app:/var/lib/mysql
@@ -13,10 +13,10 @@ services:
     environment:
       DB_NAME: expense_tracker
       DB_USER: root
-      DB_PASSWORD: yourpassword
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: database
       DB_DIALECT: mysql
-      TOKEN_KEY: inikunciku
+      TOKEN_KEY: ${TOKEN_KEY}
     depends_on:
       - database
 
