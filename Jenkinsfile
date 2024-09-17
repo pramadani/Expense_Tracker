@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DB_PASSWORD = credentials('expense-app-db-password') // Replace with your Jenkins credentials ID
-        TOKEN_KEY = credentials('expense-app-secret-token-key') // Replace with your Jenkins credentials ID
+        DB_PASSWORD = credentials('expense-app-db-password')
+        TOKEN_KEY = credentials('expense-app-secret-token-key')
     }
 
     stages {
