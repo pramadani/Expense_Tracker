@@ -23,6 +23,7 @@ const connectToDatabase = () => {
     })
     .catch(error => {
       console.error('Unable to connect to the database:', error);
+      console.log("pass " + process.env.DB_PASSWORD)
       setTimeout(connectToDatabase, retryDelay);
     });
 };
