@@ -1,7 +1,6 @@
 services:
-  mysql:
+  database:
     image: mysql:latest
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: yourpassword
       MYSQL_DATABASE: expense_tracker
@@ -11,14 +10,21 @@ services:
   backend:
     build:
       context: ./backend
-    restart: always
+    environment:
+      DB_NAME: expense_tracker
+      DB_USER: root
+      DB_PASSWORD: yourpassword
+      DB_HOST: database
+      DB_DIALECT: mysql
+      TOKEN_KEY: inikunciku
     depends_on:
-      - mysql
+      - database
 
   frontend:
     build:
       context: ./frontend
-    restart: always
+    environment:
+      BACKEND_URL: backend:3000
     ports:
       - "80:80"
 

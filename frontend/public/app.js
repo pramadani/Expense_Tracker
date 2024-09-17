@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3000/api';
+const apiUrl = '/api';
 
 document.addEventListener('DOMContentLoaded', () => {
     const authSection = document.getElementById('auth');
@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
                 const data = await response.json();
                 expenseList.innerHTML = data.map(expense => `
                     <li>${expense.description}: $${expense.amount}</li>
@@ -56,12 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ username, password })
             });
+            if (!response.ok) {
+                throw new Error('Login failed. Please check your credentials.');
+            }
             const data = await response.json();
             setToken(data.token);
             showSection('expenses');
             fetchExpenses();
         } catch (error) {
             console.error('Error logging in:', error);
+            alert(error.message); // Provide user feedback on login failure
         }
     });
 
@@ -69,18 +76,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('registerUsername').value;
         const password = document.getElementById('registerPassword').value;
         try {
-            await fetch(`${apiUrl}/register`, {
+            const response = await fetch(`${apiUrl}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ username, password })
             });
+            if (!response.ok) {
+                throw new Error('Registration failed. Please try again.');
+            }
             alert('Registration successful. Please login.');
             registerForm.style.display = 'none';
             loginForm.style.display = 'block';
         } catch (error) {
             console.error('Error registering:', error);
+            alert(error.message); // Provide user feedback on registration failure
         }
     });
 
@@ -89,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const amount = document.getElementById('amount').value;
         const description = document.getElementById('description').value;
         try {
-            await fetch(`${apiUrl}/expenses`, {
+            const response = await fetch(`${apiUrl}/expenses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,9 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ amount, description })
             });
+            if (!response.ok) {
+                throw new Error('Failed to add expense. Please try again.');
+            }
             fetchExpenses();
         } catch (error) {
             console.error('Error adding expense:', error);
+            alert(error.message); // Provide user feedback on add expense failure
         }
     });
 

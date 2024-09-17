@@ -1,9 +1,10 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const router = express.Router();
 
-const SECRET_KEY = 'your_secret_key';
+const TOKEN_KEY = process.env.TOKEN_KEY;
 
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
@@ -22,9 +23,10 @@ router.post('/login', async (req, res) => {
     if (!user || !await bcrypt.compare(password, user.password)) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, TOKEN_KEY, { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
