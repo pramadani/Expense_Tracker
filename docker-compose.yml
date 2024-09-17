@@ -2,7 +2,7 @@ services:
   database:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: inipassword
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: expense_tracker
     volumes:
       - expense-app:/var/lib/mysql
